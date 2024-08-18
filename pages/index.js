@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
 import { signMessage } from "../utils/sign";
-
 import Link from "next/link";
 import Metamask from "../component/metamask";
 
 const Index = () => {
+  const ethers = require("ethers");
+  const UsedAddress = "0x083Cc08C85A91791ADe2c63697D7B2549218686b";
+  const AllowanceClaimABI = require("../AllowanceABI.json")
   const [haveMetamask, sethaveMetamask] = useState(true);
-
   const [client, setclient] = useState({
     isConnected: false,
   });
+
+  async function submitApplication() {
+    const provider = new ethers.providers.Web3Provider(window.scroll);
+    const submitContract = new ethers.Contract(UsedAddress, AllowanceClaimABI, provider);
+
+    submitContract.submitApplication("aaa",50);
+  }
 
   const checkConnection = async () => {
     const { ethereum } = window;
@@ -109,6 +117,13 @@ const Index = () => {
                   className="btn sign-btn"
                 >
                   Sign Message
+                </button>
+                <button
+                  onClick={submitApplication}
+                  type="button"
+                  className="btn sign-btn"
+                >
+                  submitApplication
                 </button>
               </>
             ) : (
